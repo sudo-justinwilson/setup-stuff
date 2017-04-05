@@ -1,0 +1,3 @@
+# SETUP STUFF
+This repo is for storing stuff that I need to setup different environments (like when I install Linux for example..).
+I have made this repo in the hope that I can save time, when I install Linux on a new computer, etc...
