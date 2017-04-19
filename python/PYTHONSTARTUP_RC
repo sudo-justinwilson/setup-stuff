@@ -1,0 +1,7 @@
+# Commands to be executed when Python interpreter starts..
+# One command per line.
+
+# Enable tab-completion:
+import rlcompleter, readline
+readline.parse_and_bind('tab:complete')
+
