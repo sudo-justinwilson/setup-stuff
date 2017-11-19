@@ -79,10 +79,10 @@ if [ -n "${BASH-}" ] || [ -n "${ZSH_VERSION-}" ] ; then
 fi
 
 ### Extra stuff by Justin:
-# If pwd is clean, the git pull, else let me know that there are changes that need to be pushed:
+# If pwd is clean, then fetch remote data, else let me know that there are local changes that need to be pushed to the remote repo (origin):
 if [[ -z `/usr/bin/git status -s` ]]; then
-    echo "Directory clean.. Doing a git pull..";
-    /usr/bin/git pull;
+    echo "Directory clean.. Doing a git fetch origin..";
+    /usr/bin/git fetch origin;
 else
     echo 'WARNING!!';
     echo "There are outstanding changes that need to be pushed to git.";
