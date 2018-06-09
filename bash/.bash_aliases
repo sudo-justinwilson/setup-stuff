@@ -25,3 +25,7 @@ alias docker="sudo docker"
 alias sshrhce1='ssh root@rhce1.local'
 alias sshrhce2='ssh root@rhce2.local'
 alias sshrhce3='ssh root@rhce3.local'
+
+# set git login:
+git config user.name "sudo-justinwilson"
+git config user.email "sudo.justin.wilson@gmail.com"
