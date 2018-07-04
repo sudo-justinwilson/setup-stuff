@@ -1,0 +1,122 @@
+#!/bin/bash
+
+# author: Justin Wilson
+
+### This is a script to rollback RHCE VMs to a base, fresh install.
+##if [[ $1 == "-h" ]]; then
+##    echo "restore-vms";
+##    echo "DESCRIPTION: restore RHCE VMs to base state.";
+##    echo "";
+##    echo "ARGS:";
+##    echo "-h :          print this help"
+##    echo "--nopower :   The VMs are powered on, after restoring the snap, by default. This argument does NOT power-on the VMs.";
+##    return 0;
+##fi
+##
+##RHCE1='64715081-fb94-4e40-a69a-2af21cf63324'
+##RHCE1_SNAP='d75a39b8-cc12-484f-a28e-b05dee00407f'
+##RHCE2='9b78187f-1125-412b-9564-471298bbe311' 
+##RHCE2_SNAP='5d71f9a8-9d8c-4dde-b9d6-cb9addc3c903'
+##RHCE3='5e7c1fec-b009-4c8a-831b-fcb8ec5daa38' 
+##RHCE3_SNAP='768b4682-516f-4a7b-8f17-2bc37f5e14c7'
+##
+##echo $1
+##
+##for vm in $RHCE1 $RHCE2 $RHCE3; do
+##    echo "The current vm is: ${vm}";
+##    if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+##        echo "Switching $vm off..";
+##        vboxmanage controlvm ${vm} poweroff;
+##    else
+##        echo "$vm is not  running";
+##    fi;
+##done
+##
+##/home/justin/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+##/home/justin/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+##/home/justin/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+##
+### optional arg to poweron VMs:
+##if [[ $1 == "--nopower" ]]; then
+##    echo "NOT POWERING ON VMs!";
+##else
+##    for vm in $RHCE1 $RHCE2 $RHCE3; do
+##        /home/justin/bin/vboxstart $vm;
+##        echo "Powering on $vm";
+##    done;
+##fi
+
+### START CASE 
+
+# Define VMs and snaps:
+# NOTICE: I've commented out the old vm uuids since moving to Croydon Park:
+#RHCE1='64715081-fb94-4e40-a69a-2af21cf63324'
+RHCE1='c2b69fed-c0cf-4b26-848a-eb6d11072f97'
+# snap with nothing installed
+#RHCE1_SNAP='d75a39b8-cc12-484f-a28e-b05dee00407f'
+#RHCE1_SNAP='4de871ed-f973-41a0-9365-7a0e40263b18'
+# new snap with policycoreutils-python screen cifs-utils samba-client selinux-policy-doc.noarch nfs-utils mailx nfs-utils httpd mod_ssl krb5-workstation krb5-libs targetcli iscsi-initiator-utils lsiscsi:
+RHCE1_SNAP='5374a768-a844-4b79-ae95-cab1098b52ed'
+#RHCE2='9b78187f-1125-412b-9564-471298bbe311' 
+RHCE2='fb3301de-2da6-4cfa-aee9-46ac2f7dbe62'
+# snap with nothing installed
+#RHCE2_SNAP='5d71f9a8-9d8c-4dde-b9d6-cb9addc3c903'
+#RHCE2_SNAP='833ab795-bc20-4c9f-a7f3-21e236a99936'
+# new snap with policycoreutils-python screen cifs-utils samba-client selinux-policy-doc.noarch nfs-utils mailx nfs-utils httpd mod_ssl krb5-workstation krb5-libs targetcli iscsi-initiator-utils lsiscsi:
+RHCE2_SNAP='5b67ee11-5e9d-4fb8-bcea-2a4e366ad8fb'
+#RHCE3='5e7c1fec-b009-4c8a-831b-fcb8ec5daa38' 
+RHCE3='365b7c2c-961c-4309-8f77-e0983169e399'
+#RHCE3_SNAP='768b4682-516f-4a7b-8f17-2bc37f5e14c7'
+# snap with nothing installed
+#RHCE3_SNAP='2fcad36f-d786-4ee3-a4bb-239b1a181c16'
+# new snap with policycoreutils-python screen cifs-utils samba-client selinux-policy-doc.noarch nfs-utils mailx nfs-utils httpd mod_ssl krb5-workstation krb5-libs targetcli iscsi-initiator-utils lsiscsi:
+RHCE3_SNAP='8babe0e3-7d32-43ed-8df3-24cdb4b3da5a'
+
+case "$1" in
+
+    "-h")
+        echo "restore-vms";
+        echo "DESCRIPTION: restore RHCE VMs to base state.";
+        echo "";
+        echo "ARGS:";
+        echo "-h :          print this help"
+        echo "--nopower :   The VMs are powered on, after restoring the snap, by default. This argument does NOT power-on the VMs.";
+        ;;
+
+    "--nopower")
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            echo "The current vm is: ${vm}";
+            if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+                echo "Switching $vm off..";
+                vboxmanage controlvm ${vm} poweroff;
+            else
+                echo "$vm is not  running";
+            fi;
+        # Restore VM snapshots:
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+        echo "NOT POWERING ON VMs!";
+        done
+        ;;
+
+    *)
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            echo "The current vm is: ${vm}";
+            if [[ -n `vboxmanage list runningvms | grep ${vm}` ]]; then
+                echo "Switching $vm off..";
+                vboxmanage controlvm ${vm} poweroff;
+            else
+                echo "$vm is not  running";
+            fi;
+        done
+        # Restore VM snapshots:
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE1 $RHCE1_SNAP;
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE2 $RHCE2_SNAP;
+        /home/justin.wilson/bin/vboxsnaprestore $RHCE3 $RHCE3_SNAP;
+        echo "POWERING ON VMs!";
+        for vm in $RHCE1 $RHCE2 $RHCE3; do
+            /home/justin.wilson/bin/vboxstart $vm;
+            echo "Powering on $vm";
+        done;
+esac
